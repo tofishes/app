@@ -58,7 +58,7 @@ define('app', ['jquery'], function ($) {
         return $.extend(this.$doms || {}, extractPredefined($container, predefinedClassName));
     };
 
-    app.prototype.init = function () {
+	app.prototype.init = function () {
         var _this = this
         ,   $xhrs = []
         ,   urls = []
@@ -74,16 +74,15 @@ define('app', ['jquery'], function ($) {
         all = $.when.apply(this, $xhrs);
         all.always(function () {
             // 单个请求，只需要取arguments即可
-            if (urls.length === 1) {
-                fn = _this.assets[urls[0]];
-                fn && fn.apply(_this, arguments);
-                return;
-            };
-
             // 多个请求arguments是双维数组
+            // 统一arguments格式
+            var args = arguments;
+            if (urls.length === 1)
+                args = [arguments]; // apply方法接受的是一个数组或类数组参数
+
             for (var i = 0; i < urls.length; i++) {
                 fn = _this.assets[urls[i]];
-                fn && fn.apply(_this, arguments[i]);
+                fn && fn.apply(_this, args[i]);
             };
 
             _this.initActions.fire();
