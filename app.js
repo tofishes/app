@@ -58,6 +58,19 @@ define('app', ['jquery'], function ($) {
         return $.extend(this.$doms || {}, extractPredefined($container, predefinedClassName));
     };
 
+    //@tofishes 替代Cookie做客户端存储
+    app.prototype.storage = function(name, value) {
+        if (value) {
+            return localStorage.setItem(name, value);
+        };
+
+        if (value === null) {
+            return localStorage.removeItem(name);
+        };
+
+        return localStorage.getItem(name);
+    };
+
 	app.prototype.init = function () {
         var _this = this
         ,   $xhrs = []
