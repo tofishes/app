@@ -52,6 +52,10 @@ define('app', ['jquery'], function ($) {
     app.prototype.getTemplates = function ($container) {
         return $.extend(this.templates || {}, extractTmpl($container));
     };
+    // 从HTML字符串片段中获取模板
+    app.prototype.parseTemplates = function(html_fragment) {
+        return extractTmpl($('<div/>').html(html_fragment));
+    };
     // 获取页面中预定义的jQuery dom对象
     // 例如： div.predefined[data-name=对象名]
     app.prototype.getDoms = function ($container, predefinedClassName) {
