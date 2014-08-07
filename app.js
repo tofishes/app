@@ -63,16 +63,17 @@ define('app', ['jquery'], function ($) {
     };
 
     //@tofishes 替代Cookie做客户端存储
+    //先序列化，再解析JSON就不会出错
     app.prototype.storage = function(name, value) {
         if (value) {
-            return localStorage.setItem(name, value);
+            return localStorage.setItem(name, JSON.stringify(value));
         };
 
         if (value === null) {
             return localStorage.removeItem(name);
         };
 
-        return localStorage.getItem(name);
+        return JSON.parse(localStorage.getItem(name));
     };
 
 	app.prototype.init = function () {
