@@ -1,27 +1,38 @@
 /**
  * 单程双向工作流
  * @author tofishes
- * @chainable
+ * @version 1.0
  * @example
 var flow = new Flow(), j = 0;
-flow.next(function() {
+flow.start(function() {
     j++;
     console.info('j : ' + j);
 }).next(function() {
     if (j > 2) {
-        console.info('j = ' + j, ' 继续下一步')
+        console.info('j = ' + j, ' 2秒后继续下一步')
         setTimeout(function(){
-          _this.nextStep();
-        }, 1000)
+          flow.nextStep();
+        }, 2000)
     } else {
         console.info('j = ' + j, ' 返回上一步')
+        // 异步情况下：
+        // setTimeout(function(){
+        //   flow.prevStep();
+        // }, 2000)
         this.prevStep();
     }
 }).next(function () {
     console.info('j理应为3，实际 j = ' , j);
 }).done();
+// j : 1
+// j = 1  返回上一步
+// j : 2
+// j = 2  返回上一步
+// j : 3
+// j = 3  2秒后继续下一步
+// j理应为3，实际 j =  3
  */
-define(function (require, exports, module) {
+;(function (global) {
     function prototype(_class, protos) {
         for (var proto in protos) {
             _class.prototype[proto] = protos[proto];
@@ -93,5 +104,18 @@ define(function (require, exports, module) {
         'waiting': function () {}
     });
 
-    return Flow;
-});
+    // AMD / RequireJS
+    if (typeof define !== 'undefined' && define.amd) {
+        define(function () {
+            return Flow;
+        });
+        return;
+    };
+    // Node.js
+    if (typeof module !== 'undefined' && module.exports) {
+        module.exports = Flow;
+        return;
+    };
+
+    global.Flow = Flow;
+})(this);
