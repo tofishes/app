@@ -2,6 +2,7 @@
  * 单程双向工作流
  * @author tofishes
  * @version 1.0
+ * @see  http://cssor.com/javascript-workflow-by-tofishes.html
  * @example
 var flow = new Flow(), j = 0;
 flow.start(function() {
