@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>jQuery下拉列表插件Dropdown演示</title>
+    <style>
+    * {
+        margin: 0;
+        padding: 0;
+    }
+
+    body {
+        font: 14px/1.45 tahoma, arial, '微软雅黑';
+        background: #fff;
+    }
+    ul {
+        list-style:none;
+    }
+    pre {
+        background: #f8f8f8;
+        border-left: 3px solid #6c6;
+        padding: 10px;
+        margin: 20px 0;
+    }
+    h3 {
+        margin: 20px 0;
+        font-weight: 400
+    }
+
+    .wrap {
+        margin: auto;
+        padding: 20px 100px;
+        width: 760px;
+    }
+
+    .dropdown {
+        position: relative;
+        width: 200px;
+    }
+    .dropdown-show-wrap {
+        padding: 5px 10px;
+        border:1px solid #ccc;
+        box-shadow: 0 0 3px #ccc inset;
+    }
+    .dropdown-show {
+        position: relative;
+        display: inline-block;
+        min-width: 100px;
+    }
+    .dropdown-show-wrap:after {
+        position: absolute;
+        right: 5px;
+        top: 5px;
+        content: '\25BC';
+        color: #888;
+    }
+    .active .dropdown-show-wrap:after {
+        content: '\25B2';
+    }
+    .dropdown-list {
+        display: none;
+        position: absolute;
+        width: 198px;
+        background: #fff;
+        border: 1px solid #ccc;
+    }
+    .dropdown-list li {
+        padding:5px 10px;
+        cursor: pointer;
+    }
+    .dropdown-list li:hover {
+        background: #e8e8e8;
+    }
+    .dropdown-list li.active {
+        background: #09d;
+        color: #fff;
+    }
+
+    a {
+        color: #06c;
+        text-decoration: none;
+    }
+    a:hover {
+        color: #f60;
+    }
+
+    </style>
+</head>
+<body>
+    <div class="wrap">
+        <h1><a href="http://cssor.com/tofishes-jquery-plugin-dropdown">ToFishes系列jQuery插件</a> - Dropdown下拉列表</h1>
+        <p><a href="dropdown.zip">点击下载 DEMO+源码</a> </p>
+        <p>日期： 2014年09月09日</p>
+        <p>@require 该插件实现基于jQuery v1.11.1</p>
+
+        <h3>使用示例：</h3>
+        <div class="dropdown">
+            <p class="dropdown-show-wrap">
+                下拉选项：<span class="dropdown-show"></span>
+            </p>
+            <ul class="dropdown-list">
+                <li data-value="1">苹果</li>
+                <li data-value="2" class="active">橘子</li>
+                <li data-value="3">香蕉</li>
+            </ul>
+        </div>
+
+<pre>
+&lt;!-- 示例的HTML结构 --&gt;
+&lt;div class="dropdown"&gt;
+    &lt;p class="dropdown-show-wrap"&gt;
+        下拉选项：&lt;span class="dropdown-show"&gt;&lt;/span&gt;
+    &lt;/p&gt;
+    &lt;ul class="dropdown-list"&gt;
+        &lt;!-- class=active的项目将作为默认选中项，否则默认选中第一个 --&gt;
+        &lt;li data-value="1"&gt;苹果&lt;/li&gt;
+        &lt;li data-value="2" class="active"&gt;橘子&lt;/li&gt;
+        &lt;li data-value="3"&gt;香蕉&lt;/li&gt;
+    &lt;/ul&gt;
+&lt;/div&gt;
+</pre>
+<pre>
+/* 示例中所需要的css */
+.dropdown {
+    position: relative;
+    width: 200px;
+}
+.dropdown-show-wrap {
+    padding: 5px 10px;
+    border:1px solid #ccc;
+    box-shadow: 0 0 3px #ccc inset;
+}
+.dropdown-show {
+    position: relative;
+    display: inline-block;
+    min-width: 100px;
+}
+.dropdown-show-wrap:after {
+    position: absolute;
+    right: 5px;
+    top: 5px;
+    content: '\25BC';
+    color: #888;
+}
+.active .dropdown-show-wrap:after {
+    content: '\25B2';
+}
+.dropdown-list {
+    display: none;
+    position: absolute;
+    width: 198px;
+    background: #fff;
+    border: 1px solid #ccc;
+}
+.dropdown-list li {
+    padding:5px 10px;
+    cursor: pointer;
+}
+.dropdown-list li:hover {
+    background: #e8e8e8;
+}
+.dropdown-list li.active {
+    background: #09d;
+    color: #fff;
+}
+</pre>
+
+<pre class="code">
+// 调用代码
+// 以下展示的参数为默认参数，可选
+$('.dropdown').dropdown({
+    'show': '.dropdown-show', // 显示文字的容器
+    'list': '.dropdown-list', // 下拉列表容器
+    'item': 'li', // 下拉列表单项项目
+    'onselect': function ($selected, $show) {
+        window.console & console.info($selected.data('value'));
+    } // 选中后的回调，可以返回字符串作为显示文字
+});
+</pre>
+    </div>
+
+    <script src="http://upcdn.b0.upaiyun.com/libs/jquery/jquery-1.10.2.min.js"></script>
+    <script src="jquery.dropdown.js"></script>
+    <script>
+    $('pre.code').each(function () {
+        var script = $(this).html().replace('amp;', '')
+        ,   func = new Function(script);
+
+        func();
+    })
+    </script>
+</body>
+</html>
