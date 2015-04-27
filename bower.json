@@ -1,0 +1,29 @@
+{
+  "name": "app",
+  "main": "app.js",
+  "version": "0.0.1",
+  "homepage": "https://github.com/tofishes/app",
+  "authors": [
+    "ToFishes <tofishes@163.com>"
+  ],
+  "description": "one base app framework",
+  "moduleType": [
+    "amd",
+    "es6",
+    "node"
+  ],
+  "keywords": [
+    "app"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "pace": "~1.0.2"
+  }
+}
