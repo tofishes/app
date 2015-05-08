@@ -27,7 +27,7 @@ module.exports = function(app) {
     var html_element = document.querySelector('#side-nav-wrap');
     app.component('side-nav', '#selector' || html_element, function (request, response) {
         // 数据获取初始化类似上面的方法
-        var data = {};
+        var data = this.store({});
 
         return response(SideNav, data)
     });
