@@ -5,10 +5,10 @@
 // Router('/list/:id/:page')
 var app = require('app');
 
-app.rounter({
-    '/list/:id/:page': 'listAction', // or '/list/:id-:page'
-    '/detail/:id': 'detailAction'
-})
+// app.rounter({
+//     '/list/:id/:page': 'listAction', // or '/list/:id-:page'
+//     '/detail/:id': 'detailAction'
+// })
 app.setDefault({
     'pageDOMNode': document.body
 })
@@ -17,23 +17,24 @@ app.helper({
 });
 
 
-var ListPage = require('list-page.jsx')
-var listAction = app.createAction({
-    async: function(request) {
-        var route = request.route; // '/list/10/1'
-        var params = request.query; // {'id': 10, 'page': 1}
+// var ListPage = require('list-page.jsx')
+// var listAction = app.createAction({
+//     async: function(request) {
+//         var route = request.route; // '/list/10/1'
+//         var params = request.query; // {'id': 10, 'page': 1}
 
-        $.get('/list', params, function (data) {
-            pageContext.listdata = data;
-
-            // pageContext[componentName]
-        })
-        app.helper.getListData(request);
-    },
-    response: function () {
-        return renderPage(ListPage)
-    }
-});
+//         $.get('/list', params, function (data) {
+//             // pageContext.listdata = data;
+//             // 通知某个组件更新数据
+//             app.message(data, ['componentOne'])
+//             app.message(data, 'componentTwo')
+//         })
+//         app.helper.getListData(request);
+//     },
+//     response: function () {
+//         return renderPage(ListPage)
+//     }
+// });
 
 app.renderPage(Page) {
     React.renderComponent(<Page componentName="page" />, app.pageDOMNode);
@@ -67,6 +68,10 @@ prototype(App, {
     },
     route: function (routers) {
         
+    },
+    // 通知方法    
+    message: function (data, components) {
+        pageContext[component].setState(data)
     },
     init: function () {
         if (this.hasInited) {

@@ -1,4 +1,6 @@
 function support_app() {
     return Date.now
-        && window.JSON;
+        && window.JSON
+        && document.querySelector
+        && Object.observe;
 }
