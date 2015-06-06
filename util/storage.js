@@ -3,8 +3,10 @@
  * 本地存储的封装，包含sessionStorage
  * @example
  * var storage = new Storage();
+ * var seesion = new Storage('session'); // session作用域
  * storage.set('a', 111) // 存储，同时存入一个时间戳或指定的版本号
  * storage.set('a', 111, 'v1.1.2') // 存储, 带版本号
+ * storage.setExpired('a', '2015-10-11 14:20:25') // 设置a过期时间
  * storage.get('a') // 获取，输出111
  * storage.list();  // 返回当前已存储的内容
  * storage.remove('a'), // 移除a
@@ -13,7 +15,15 @@
  * storage.removeStoreTime('a') 移除a存入的时间
  */
 ;(function (global) {
-    var storeTimeName = 'storage-time';
+    var storeTimeName = 'storage-time'
+    ,   expireTimeName = 'expire-time'
+    ,   one_day = 24 * 60 * 60 * 1000;
+
+    if (!Date.now) {
+        Date.now = function now() {
+            return new Date().getTime();
+        };
+    }
 
     function setStorage(name, value) {
         return this.storage.setItem(name, JSON.stringify(value));
@@ -43,6 +53,7 @@
         }
 
         this.Time = getStorage.call(this, storeTimeName) || {};
+        this.Expires = getStorage.call(this, expireTimeName) || {};
     }
 
     prototype(Storage, {
@@ -54,7 +65,35 @@
             return this;
         },
         get: function (name) {
+            // 过期检查并自动清理
+            this.expire();
             return getStorage.call(this, name);
+        },
+        setExpired: function (name, date) { // 设置有效期多少天
+            date = date.replace(/\-/g, '/');
+            var expireTime = new Date(date).getTime();
+
+            if (!expireTime) {
+                return window.console && console.error('Error: 设置过期时间错误，无法转为正确时间');
+            }
+
+            this.Expires[name] = expireTime;
+
+            setStorage.call(this, expireTimeName, this.Expires)
+        },
+        expire: function () {
+            var name
+            ,   now = Date.now()
+            ,   hasExpired = false;
+
+            for (name in this.Expires) {
+                if (now > this.Expires[name]) {
+                    this.remove(name);
+                    delete this.Expires[name];
+                    hasExpired = true;
+                }
+            }
+            hasExpired && setStorage.call(this, expireTimeName, this.Expires);
         },
         list: function () {
             var l = this.storage.length
@@ -76,6 +115,8 @@
         },
         clear: function () {
             this.storage.clear();
+            this.Time = {};
+            this.Expires1 = {};
 
             return this;
         },
