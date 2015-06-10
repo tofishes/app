@@ -116,7 +116,7 @@
         clear: function () {
             this.storage.clear();
             this.Time = {};
-            this.Expires1 = {};
+            this.Expires = {};
 
             return this;
         },
