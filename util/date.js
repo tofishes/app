@@ -9,25 +9,66 @@ var DATE = {}
  *                         该字符串应去除首尾空格及其他字符
  * @return {[Date]} 日期对象
  */
+function isDate(o){
+   return Object.prototype.toString.call(o) === "[object Date]"; //&& o.toString() !== 'Invalid Date' && !isNaN(o);
+}
+DATE.isDate = isDate
+
+DATE.getTime = function(date){
+    var now = date ? DATE.parse(date) : new Date();
+    return now.getTime();
+}
+
+// 只有一个参数，表示与当前时间对比
+DATE.diff = function (date, date_other) {
+    if (arguments.length == 1) {
+        date_other = date;
+        date = new Date();
+    }
+    date = DATE.parse(date);
+    date_other = DATE.parse(date_other);
+
+    return date - date_other;
+}
+// 只有一个参数，表示与当前时间对比
+// 判断date是否大于date_other
+DATE.gt = function (date, date_other) {
+    return DATE.diff.apply(this, arguments) > 0;
+}
+// 只有一个参数，表示与当前时间对比
+// 判断date是否小于date_other
+DATE.lt = function (date, date_other) {
+    return DATE.diff.apply(this, arguments) > 0;
+}
+
 DATE.parse = function (date) {
-    if (!date || date.getDate) {
+    // 是一个Date对象
+    if (isDate(date)) {
         return date;
     }
+    // 毫秒数
+    if (!isNaN(date)) {
+        return new Date(+date) // ie8不支持 '12313123123' 字符串形式的毫秒数
+    }
 
+    // 以下是字符串
     var metas = date.split(/\D+/)
     ,   monthIndex = 1 // 索引到setMonth方法，需要 减1
-    ,   i = 0
+    ,   i = 3 // 从小时开始，年月日可以通过setFullYear设置
     ,   l = metas.length
     ,   date = new Date()
     ,   meta;
 
+    if (metas[monthIndex]) {
+        metas[monthIndex] -= 1;
+    }
+    // 单独执行setMonth方法有误，因为setMonth方法不设第二个参数会影响月份正确性
+    // 设置年月日
+    date.setFullYear.apply(date, metas)
+    // 设置时分秒
     for (; i < l; i++) {
         meta = metas[i];
-        if (i == monthIndex) {
-            meta -= 1;
-        }
-
-        date[dateMethods[i]](meta)
+        date[dateMethods[i]](meta);
     }
 
     return date;
@@ -42,7 +83,7 @@ DATE.format = function(date, format) {
     if (!date) return date;
 
     date = DATE.parse(date);
-    format = format || 'YYYY-MM-dd hh:mm:ss';
+    format = format || 'yyyy-MM-dd hh:mm:ss';
 
     var week = date.getDay()
     ,   o = {
@@ -69,3 +110,5 @@ DATE.format = function(date, format) {
     return format;
 };
 window.DATE = DATE;
+
+module.exports = DATE;
